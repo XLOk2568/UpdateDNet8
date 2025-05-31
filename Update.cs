@@ -1,76 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System;
+using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-
 namespace UpdateD
 {
-    
-    
     public class Update
     {
-        public string[] after;
-        public bool GetUpdate(string ID,string Ver)
+        public string[]? after;
+        public bool GetUpdate(string ID, string Ver)
         {
-            
-                WebClient MyWebClient = new WebClient();
-                MyWebClient.Credentials = CredentialCache.DefaultCredentials;//获取或设置用于向Internet资源的请求进行身份验证的网络凭据
-                StringBuilder sb = new StringBuilder();
-                String pageData = MyWebClient.DownloadString("http://2018k.cn/api/checkVersion?id="+ID+"&version=" + Ver); //从指定网站下载数据
-                pageData = Encoding.UTF8.GetString(MyWebClient.DownloadData("http://2018k.cn/api/checkVersion?id=" + ID + "&version=" + Ver));
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                string url = $"http://2018k.cn/api/checkVersion?id={ID}&version={Ver}";
+                HttpResponseMessage response = client.GetAsync(url).Result;
+                string pageData = response.Content.ReadAsStringAsync().Result;
                 after = pageData.Split(new char[] { '|' });
-            if(after[0] == "true")
-            {
-                return true;
+                return after[0] == "true";
             }
-            else
-            {
-                return false;
-            }
-            
-            
-         
         }
         public string GetUpdateRem(string ID)
         {
-
-            WebClient MyWebClient = new WebClient();
-            MyWebClient.Credentials = CredentialCache.DefaultCredentials;//获取或设置用于向Internet资源的请求进行身份验证的网络凭据
-            StringBuilder sb = new StringBuilder();
-            String pageData = MyWebClient.DownloadString("http://2018k.cn/api/getExample?id=" + ID + "&data=remark"); //从指定网站下载数据
-            pageData = Encoding.UTF8.GetString(MyWebClient.DownloadData("http://2018k.cn/api/getExample?id="+ID+ "&data=remark"));
-            return pageData;
-
-
-
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                string url = $"http://2018k.cn/api/getExample?id={ID}&data=remark";
+                HttpResponseMessage response = client.GetAsync(url).Result;
+                string pageData = response.Content.ReadAsStringAsync().Result;
+                return pageData;
+            }
         }
         public string GetUpdateFile(string ID)
         {
-
-            WebClient MyWebClient = new WebClient();
-            MyWebClient.Credentials = CredentialCache.DefaultCredentials;//获取或设置用于向Internet资源的请求进行身份验证的网络凭据
-            StringBuilder sb = new StringBuilder();
-            String pageData = MyWebClient.DownloadString("http://2018k.cn/api/getExample?id=" + ID + "&data=url"); //从指定网站下载数据
-            pageData = Encoding.UTF8.GetString(MyWebClient.DownloadData("http://2018k.cn/api/getExample?id=" + ID + "&data=url"));
-            return pageData;
-
-
-
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                string url = $"http://2018k.cn/api/getExample?id={ID}&data=url";
+                HttpResponseMessage response = client.GetAsync(url).Result;
+                string pageData = response.Content.ReadAsStringAsync().Result;
+                return pageData;
+            }
         }
         public string GetUpdateNotice(string ID)
         {
-
-            WebClient MyWebClient = new WebClient();
-            MyWebClient.Credentials = CredentialCache.DefaultCredentials;//获取或设置用于向Internet资源的请求进行身份验证的网络凭据
-            StringBuilder sb = new StringBuilder();
-            String pageData = MyWebClient.DownloadString("http://2018k.cn/api/getExample?id=" + ID + "&data=notice"); //从指定网站下载数据
-            pageData = Encoding.UTF8.GetString(MyWebClient.DownloadData("http://2018k.cn/api/getExample?id=" + ID + "&data=notice"));
-            return pageData;
-
-
-
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear();
+                string url = $"http://2018k.cn/api/getExample?id={ID}&data=notice";
+                HttpResponseMessage response = client.GetAsync(url).Result;
+                string pageData = response.Content.ReadAsStringAsync().Result;
+                return pageData;
+            }
         }
     }
 }
